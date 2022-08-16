@@ -17,9 +17,9 @@ Pumas for non-linear mixed effects modeling
 ### Workshop Outline
 
 October 29, 2022
-- 8:30 - 08:50 - Setting up the workspace
+- 08:30 - 08:50 - Setting up the workspace
 - 08:50 - 09:15 - JuliaHub - Instances and File Explorer
-- 9:15 - 10:00 - NCA
+- 09:15 - 10:00 - NCA
 - 10:00 - 10:15 - Coffee break
 - 10:15 - 10:45 - Bioequivalence
 - 10:45 - 12:30 - Population Pharmacokinetic modeling Part 1 - Overview of Pumas and Pumas Workflow
@@ -29,7 +29,7 @@ October 29, 2022
 - 14:45 - 15:30 - Model-based Optimal Design
 
 October 30, 2022
-- 8:30 - 10:00 - Model Diagnostics Part 1 - Plotting
+- 08:30 - 10:00 - Model Diagnostics Part 1 - Plotting
 - 10:00 - 10:15 - Coffee break
 - 10:15 - 11:15 - Model Diagnostics Part 2 - Model qualification
 - 11:15 - 12:30 - Sequential PKPD 
