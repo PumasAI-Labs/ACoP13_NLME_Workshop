@@ -21,9 +21,9 @@ October 29, 2022
 - 9:00 - 10:00 - NCA
 - 10:00 - 10:15 - Coffee break
 - 10:15 - 10:45 - Bioequivalence
-- 10:45 - 12:30 - Population Pharmacokinetic modeling
+- 10:45 - 12:30 - Population Pharmacokinetic modeling Part 1 - Overview of Pumas
 - 12:30 - 13:30 - Lunch break
-- 13:30 - 14:30 - PopPK model building
+- 13:30 - 14:30 - Population Pharmacokinetic modeling Part 2 - Pumas Workflows
 - 14:30 - 14:45 - Coffee break
 - 14:45 - 15:30 - Model-based Optimal Design
 
