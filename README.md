@@ -30,8 +30,8 @@ October 29, 2022
 October 30, 2022
 - 8:30 - 10:00 - Model Diagnostics Part 1 - Plotting
 - 10:00 - 10:15 - Coffee break
-- 10:15 - 10:30 - Model Diagnostics Part 1 - Model qualification
-- 10:30 - 12:30 - Sequential PKPD 
+- 10:15 - 11:15 - Model Diagnostics Part 2 - Model qualification
+- 11:15 - 12:30 - Sequential PKPD 
 - 12:30 - 13:30 - Lunch break
 - 13:30 - 14:30 - Data Wrangling and Plotting in Pumas
 - 14:30 - 14:45 - Coffee break
