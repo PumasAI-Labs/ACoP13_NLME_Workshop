@@ -34,6 +34,6 @@ October 30, 2022
 - 10:15 - 11:15 - Model Diagnostics Part 2 - Model qualification
 - 11:15 - 12:30 - Sequential PKPD 
 - 12:30 - 13:30 - Lunch break
-- 13:30 - 14:30 - Data Wrangling and Plotting in Pumas
+- 13:30 - 14:30 - Data Wrangling
 - 14:30 - 14:45 - Coffee break
 - 14:45 - 15:30 - Sneak peek into DeepPumas
