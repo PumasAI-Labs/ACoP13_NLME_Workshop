@@ -66,7 +66,7 @@ fit_results = fit(model, pop, params, Pumas.FOCE())
 fit_results_naive = fit(model, pop, params, Pumas.NaivePooled(); omegas=(:Ω,))
 fit_results_fixed = fit(model, pop, params, Pumas.FOCE(); constantcoef=(tvcl=0.3,))
 
-# Confidence Intervals
+# Confidence Intervals using asymptotic variance-covariance
 fit_infer = infer(fit_results)
 coeftable(fit_infer)  # DataFrame
 
@@ -78,19 +78,55 @@ coeftable(fit_infer_bs)
 fit_infer_sir = infer(fit_results, Pumas.SIR(samples=10, resamples=10))
 coeftable(fit_infer_sir)
 
-# Inspect the models
-fit_inspect = inspect(fit_results)
-fit_inspect_naive = inspect(fit_results_naive)
-fit_inspect_fixed = inspec
-
 # Loglikelihood and NONMEM's OFV with constant
+loglikelihood(fit_results) # using a result from fit
+loglikelihood(model, pop, coef(fit_results), Pumas.FOCE()) # using model + population + params + estimation method
+loglikelihood(model, pop[1], coef(fit_results), Pumas.FOCE()) # using model + subject + params + estimation method
+# to reproduce NONMEM's "OFV with constant" you need to divide by -2
+loglikelihood(fit_results) / -2
 
 # AIC
+aic(fit_results)
+aic(fit_results_naive)
+aic(fit_results_fixed)
 
 # BIC
+bic(fit_results)
+bic(fit_results_naive)
+bic(fit_results_fixed)
 
 # ϵ-Shinkrage
+ϵshrinkage(fit_results)
+ϵshrinkage(fit_results_naive)
+ϵshrinkage(fit_results_fixed)
 
 # η-Shinkrage
+ηshrinkage(fit_results)
+ηshrinkage(fit_results_naive)
+ηshrinkage(fit_results_fixed)
 
-# Model metrics
+# Model metrics in a DataFrame
+metrics_table(fit_results)
+metrics_table(fit_results_naive)
+metrics_table(fit_results_fixed)
+
+# Get the individual coefficients as a DataFrame
+DataFrame(icoef(fit_results))
+
+# Inspect the models
+# this runs predictions, wres, ebes, icoef and dosecontrol
+fit_inspect = inspect(fit_results)
+fit_inspect_naive = inspect(fit_results_naive)
+fit_inspect_fixed = inspect(fit_results_fixed)
+
+# output in a handy DataFrame format
+DataFrame(fit_inspect)
+DataFrame(fit_inspect_naive)
+DataFrame(fit_inspect_fixed)
+
+# you can get any of the single results using the functions
+DataFrame(predict(fit_results))
+DataFrame(wresiduals(fit_results))
+DataFrame(empirical_bayes(fit_results))
+DataFrame(icoef(fit_results))
+DataFrame(dosecontrol(fit_results)) # no dose control parameters here
