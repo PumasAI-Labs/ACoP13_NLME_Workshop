@@ -7,30 +7,30 @@ using CSV
 # Read in data
 # iv infusion given over 2 hours with demographic information (age, weight, sex, crcl)
 pkfile = dataset("nlme_sample.csv", String)
-pkdata = CSV.read(pkfile, DataFrame; missingstrings=["NA", ""])
+pkdata = CSV.read(pkfile, DataFrame; missingstrings = ["NA", ""])
 
 pop = read_pumas(
     pkdata,
-    id=:ID,
-    time=:TIME,
-    amt=:AMT,
-    covariates=[:WT, :AGE, :SEX, :CRCL, :GROUP],
-    observations=[:DV],
-    cmt=:CMT,
-    evid=:EVID,
-    rate=:RATE,
+    id = :ID,
+    time = :TIME,
+    amt = :AMT,
+    covariates = [:WT, :AGE, :SEX, :CRCL, :GROUP],
+    observations = [:DV],
+    cmt = :CMT,
+    evid = :EVID,
+    rate = :RATE,
 )
 
 
 # 2-cpt with weight and CRCL
 model = @model begin
     @param begin
-        tvcl ∈ RealDomain(lower=0)
-        tvvc ∈ RealDomain(lower=0)
-        tvq ∈ RealDomain(lower=0)
-        tvvp ∈ RealDomain(lower=0)
+        tvcl ∈ RealDomain(lower = 0)
+        tvvc ∈ RealDomain(lower = 0)
+        tvq ∈ RealDomain(lower = 0)
+        tvvp ∈ RealDomain(lower = 0)
         Ω ∈ PDiagDomain(2)
-        σ ∈ RealDomain(lower=0)
+        σ ∈ RealDomain(lower = 0)
     end
 
     @random begin
@@ -59,23 +59,23 @@ end
 
 # Parameter values
 params =
-    (tvvc=5, tvcl=0.02, tvq=0.01, tvvp=10, Ω=Diagonal([0.01, 0.01]), σ=0.01)
+    (tvvc = 5, tvcl = 0.02, tvq = 0.01, tvvp = 10, Ω = Diagonal([0.01, 0.01]), σ = 0.01)
 
 # Fit models
 fit_results = fit(model, pop, params, Pumas.FOCE())
-fit_results_naive = fit(model, pop, params, Pumas.NaivePooled(); omegas=(:Ω,))
-fit_results_fixed = fit(model, pop, params, Pumas.FOCE(); constantcoef=(tvcl=0.3,))
+fit_results_naive = fit(model, pop, params, Pumas.NaivePooled(); omegas = (:Ω,))
+fit_results_fixed = fit(model, pop, params, Pumas.FOCE(); constantcoef = (tvcl = 0.3,))
 
 # Confidence Intervals using asymptotic variance-covariance
 fit_infer = infer(fit_results)
 coeftable(fit_infer)  # DataFrame
 
 # Confidence Intervals using bootstrap
-fit_infer_bs = infer(fit_results, Pumas.Bootstrap(samples=100))
+fit_infer_bs = infer(fit_results, Pumas.Bootstrap(samples = 100))
 coeftable(fit_infer_bs)
 
 # Confidence Intervals using SIR
-fit_infer_sir = infer(fit_results, Pumas.SIR(samples=10, resamples=10))
+fit_infer_sir = infer(fit_results, Pumas.SIR(samples = 10, resamples = 10))
 coeftable(fit_infer_sir)
 
 # Loglikelihood and NONMEM's OFV with constant
