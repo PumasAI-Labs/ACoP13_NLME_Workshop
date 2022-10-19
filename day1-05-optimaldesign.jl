@@ -1,4 +1,5 @@
 using OptimalDesign # this already imports Pumas
+using CSV
 using PumasUtilities
 using DataFramesMeta
 using PharmaDatasets
