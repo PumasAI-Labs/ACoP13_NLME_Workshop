@@ -11,12 +11,13 @@ datapath = dataset("warfarin", String)
 df = CSV.read(datapath, DataFrame; missingstring = [".", "", "NA"])
 pop = read_pumas(df)
 
-## create a :route column for NCA
+### NCA
+# create a :route column for NCA
 @rtransform! df :route = "ev"
 
-## NCA Population
+# NCA Population
 pop_nca = read_nca(df; observations = :dv)
-## Mean Concentration vs Time Plot
+# Mean Concentration vs Time Plot
 summary_observations_vs_time(
     pop_nca,
     axis = (; xlabel = "Time (hr)", ylabel = "Warfarin Concentration (μg/mL)"),
