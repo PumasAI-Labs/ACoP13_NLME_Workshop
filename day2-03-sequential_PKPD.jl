@@ -9,29 +9,29 @@ using PharmaDatasets
 pkpd_df = dataset("inf_sd_5_idr")
 
 # 2. Map to read_pumas for population. Only use PK
-pkpdpop = read_pumas(pkpd_df, observations=[:dv], covariates=[:BSL])
+pkpdpop = read_pumas(pkpd_df, observations = [:dv], covariates = [:BSL])
 
 # 3. Plot Data
 @chain pkpd_df begin
     dropmissing(:dv)
     data(_) *
-    mapping(:time, :dv; layout=:id => nonnumeric) *
-    visual(ScatterLines, linewidth=4, markersize=8, markercolor=:blue)
+    mapping(:time, :dv; layout = :id => nonnumeric) *
+    visual(ScatterLines, linewidth = 4, markersize = 8, markercolor = :blue)
     draw(
-        axis=(xlabel="Time (hours)", ylabel="PK Concentration", yscale=log10),
-        figure=(resolution=(1400, 1000), fontsize=22),
+        axis = (xlabel = "Time (hours)", ylabel = "PK Concentration", yscale = log10),
+        figure = (resolution = (1400, 1000), fontsize = 22),
     )
 end
 
 # 4. Specify pk model and parameters
 inf_2cmt = @model begin
     @param begin
-        tvcl ∈ RealDomain(lower=0)
-        tvvc ∈ RealDomain(lower=0)
-        tvq ∈ RealDomain(lower=0)
-        tvvp ∈ RealDomain(lower=0)
+        tvcl ∈ RealDomain(lower = 0)
+        tvvc ∈ RealDomain(lower = 0)
+        tvq ∈ RealDomain(lower = 0)
+        tvvp ∈ RealDomain(lower = 0)
         Ω_pk ∈ PDiagDomain(4)
-        σ_prop_pk ∈ RealDomain(lower=0)
+        σ_prop_pk ∈ RealDomain(lower = 0)
     end
 
     @random begin
@@ -58,12 +58,12 @@ end
 
 ## specify the parameters
 twocomp_params = (
-    tvcl=1.5,
-    tvvc=25.0,
-    tvq=5.0,
-    tvvp=150.0,
-    Ω_pk=Diagonal([0.05, 0.05, 0.05, 0.05]),
-    σ_prop_pk=0.02,
+    tvcl = 1.5,
+    tvvc = 25.0,
+    tvq = 5.0,
+    tvvp = 150.0,
+    Ω_pk = Diagonal([0.05, 0.05, 0.05, 0.05]),
+    σ_prop_pk = 0.02,
 )
 #
 
@@ -72,7 +72,7 @@ pkfit = fit(inf_2cmt, pkpdpop, twocomp_params, Pumas.FOCE())
 
 # 6. explore the results
 pkinspect = inspect(pkfit)
-goodness_of_fit(pkinspect, ols=false)
+goodness_of_fit(pkinspect, ols = false)
 
 # Assume that the pk model above is the final model
 
@@ -84,7 +84,7 @@ indpars[!, :id] = parse.(Int64, indpars.id)
 # 8. Merge the individual parameters with original dataset
 # more on this in the "Data Wrangling" upcoming session
 pkparam_pkpddf = @chain pkpd_df begin
-    leftjoin(indpars, on=[:id])
+    leftjoin(indpars, on = [:id])
     dropmissing([:CL, :Vc, :Q, :Vp])
     rename(:CL => :iCL, :Vc => :iVc, :Q => :iQ, :Vp => :iVp)
 end
@@ -92,19 +92,19 @@ end
 # 9. Convert data into population
 pdpop = read_pumas(
     pkparam_pkpddf,
-    observations=[:resp],
-    covariates=[:BSL, :iCL, :iVc, :iQ, :iVp],
+    observations = [:resp],
+    covariates = [:BSL, :iCL, :iVc, :iQ, :iVp],
 )
 
 # 10. Specify the PKPD model
 inf_2cmt_lin_turnover = @model begin
     @param begin
         # PD parameters
-        tvturn ∈ RealDomain(lower=0)
-        tvebase ∈ RealDomain(lower=0)
-        tvec50 ∈ RealDomain(lower=0)
+        tvturn ∈ RealDomain(lower = 0)
+        tvebase ∈ RealDomain(lower = 0)
+        tvec50 ∈ RealDomain(lower = 0)
         Ω_pd ∈ PDiagDomain(1)
-        σ_add_pd ∈ RealDomain(lower=0)
+        σ_add_pd ∈ RealDomain(lower = 0)
 
     end
 
@@ -151,11 +151,11 @@ end
 
 ## specify the parameters
 turnover_params =
-    (tvturn=10, tvebase=10, tvec50=0.3, Ω_pd=Diagonal([0.05]), σ_add_pd=0.2)
+    (tvturn = 10, tvebase = 10, tvec50 = 0.3, Ω_pd = Diagonal([0.05]), σ_add_pd = 0.2)
 
 # 11. Fit the PD data via sequential pkpd
 pkpdfit = fit(inf_2cmt_lin_turnover, pdpop, turnover_params, Pumas.FOCE())
 
 # 12. explore the results
 pdinspect = inspect(pkpdfit)
-goodness_of_fit(pdinspect, ols=false)
+goodness_of_fit(pdinspect, ols = false)
