@@ -1,20 +1,14 @@
-using CSV
-using DataFramesMeta
-using Dates
 using Pumas
-using Pumas.Latexify
 using PumasUtilities
-using Random
-using CairoMakie
 using PharmaDatasets
 
-#Read in Data
+# Read in Data
 pkfile = dataset("iv_sd_3")
 
-#Convert DataFrame into Collection of Subjects (Population)
+# Convert DataFrame into Collection of Subjects (Population)
 population = read_pumas(pkfile)
 
-#Model definition
+# Model definition
 model = @model begin
 
     @param begin
@@ -56,59 +50,29 @@ params2 = (tvcl = 1.0, tvvc = 8.0, Ω = Diagonal([0.5, 0.5]), σ = 4.16)
 fit_results = fit(model, population, params, Pumas.FOCE())
 fit_results2 = fit(model, population, params, Pumas.NaivePooled(); omegas = (:Ω,))
 fit_results3 = fit(model, population, params2, Pumas.LaplaceI())
-fit_results4 = fit(model, population, params2, Pumas.FOCE(); constantcoef=(tvcl = 1.0,))
+fit_results4 = fit(model, population, params2, Pumas.FOCE(); constantcoef = (tvcl = 1.0,))
 
 fit_compare = compare_estimates(;
     FOCE = fit_results,
     LaplaceI = fit_results3,
     NaivePooled = fit_results2,
-    FOCE_constantcoef = fit_results4
+    FOCE_constantcoef = fit_results4,
 )
-
-# Confidence Intervals
-fit_infer = infer(fit_results)
-coeftable(fit_infer)  # DataFrame
-
-# Confidence Intervals using bootstrap
-fit_infer_bs = infer(fit_results, Pumas.Bootstrap(samples = 100))
-coeftable(fit_infer_bs)
-
-#SIR
-fit_infer_sir = infer(fit_results, Pumas.SIR(samples=10, resamples=10))
-coeftable(fit_infer_sir)
-
-# Inspect the models
-fit_inspect = inspect(fit_results)
-fit_inspect2 = inspect(fit_results2)
-fit_inspect3 = inspect(fit_results3)
-fit_diagnostics = evaluate_diagnostics((;
-    FOCE = fit_inspect,
-    NaivePooled = fit_inspect2,
-    LaplaceI = fit_inspect3,
-))
 
 # VPCs
 fit_vpc = vpc(fit_results) # Single-Threaded
 fit_vpc = vpc(
     fit_results; # Multi-Threaded
     ensemblealg = EnsembleThreads(),
-    prediction_correction=true # pc-vpc
+    prediction_correction = true, # pc-vpc
 )
 
 vpc_plot(fit_vpc)
 
-# Pumas Apps
-fit_diagnostics = evaluate_diagnostics((;FOCE=fit_inspect, LaplaceI=fit_inspect3),)
-
-model_explore = explore_estimates(model, population, params)
-coef(model_explore)
-
 # Generate a report for all of our fitted models
-report(
-    (;
-        FOCE = (fit_results, fit_inspect, fit_vpc),
-        LaplaceI = fit_results3,
-        NaivePooled = fit_results2,
-        FOCE_constantcoef = fit_results4
-    )
-)
+report((;
+    FOCE = (fit_results, fit_vpc), # using vpc result
+    LaplaceI = fit_results3,
+    NaivePooled = fit_results2,
+    FOCE_constantcoef = fit_results4,
+))
