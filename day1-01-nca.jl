@@ -117,20 +117,23 @@ report(nca_bolus_sd_report, param_summary_bolus_sd)
 
 
 ## Load Data
-pk_md_data_csv = dataset("nlme_sample.csv", String) #load dataset from PharmaDatasets 
-pk_md_data = CSV.read(pk_md_data_csv, DataFrame;)
+pk_md_data = dataset("nlme_sample.csv") #load dataset from PharmaDatasets 
 
 ## Add ii column to tell us how often dose is given
-pk_md_data = @rtransform pk_md_data :ii = 24
-pk_md_data = @rtransform pk_md_data :addl = :TIME == 0 ? 5 : missing
+@rtransform! pk_md_data begin
+    :ii = 24
+    :addl = :TIME == 0 ? 5 : missing
+end
 
 ## select first dose and a ss dose example
-pk_md_data = @rsubset pk_md_data :OCC == 1 || :OCC == 7
-pk_md_data = @rsubset pk_md_data :ID != 28
+@rsubset! pk_md_data begin
+    :OCC == 1 || :OCC == 7
+    :ID != 28
+end
 
 
-## Tell NCA that this measurement is at steady state ....  you can also run with just the occ 7 data and this ss flag 
-pk_md_data = @rtransform pk_md_data :ss = :TIME > 24 ? 1 : 0
+## Tell NCA that this measurement is at steady state ...  you can also run with just the occ 7 data and this ss flag 
+@rtransform! pk_md_data :ss = :TIME > 24 ? 1 : 0
 
 ## Specify the units used in the analysis
 timeu = u"hr"
@@ -140,7 +143,7 @@ amtu = u"mg"
 
 ## Map DataFrame to NCA Population
 pop_inf_md = read_nca(
-    pk_md_data,
+    pk_md_data;
     id = :ID,
     time = :TIME,
     observations = :DV,
@@ -158,7 +161,7 @@ pop_inf_md = read_nca(
 ) # we want to be able to compare the differnt doses and first dose vs ss.
 
 nca_inf_md_report = run_nca(
-    pop_inf_md,
+    pop_inf_md;
     sigdigits = 3,
     studyid = "STUDY-002",
     studytitle = "Drug Trial: Infusion Multiple Dose", # required
