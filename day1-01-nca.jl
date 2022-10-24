@@ -22,7 +22,7 @@ amtu = u"mg"
 
 ################################# Single dose NCA#################################################
 
-## Map Dataframe to NCA Population
+## Map DataFrame to NCA Population
 pop_bolus_sd = read_nca(
     pk_data,
     id = :id,
@@ -40,10 +40,10 @@ pop_bolus_sd = read_nca(
 
 
 # Preview data  
-## Vizulalize individual concentration-time curve - linear scale 
+## Visualize individual concentration-time curve - linear scale 
 obsvstimes = observations_vs_time(pop_bolus_sd[7])
 
-## Vizulalize individual concentration-time curve - semi-log scale
+## Visualize individual concentration-time curve - semi-log scale
 obsvstimes = observations_vs_time(pop_bolus_sd[7], axis = (yscale = log,))
 
 ## Visualize the mean concentration-time curve of population 
@@ -98,7 +98,7 @@ individual_params = innerjoin(
     makeunique = true,
 )
 
-## Calculation of AUC at specific time intervals and merge to the final report dataframe
+## Calculation of AUC at specific time intervals and merge to the final report DataFrame
 auc0_12 = NCA.auc(pop_bolus_sd, interval = (0, 12), method = :linuplogdown, sigdigits = 3) #various other methods are :linear, :linlog
 auc12_24 = NCA.auc(pop_bolus_sd, interval = (12, 24), method = :linuplogdown, sigdigits = 3)
 final = innerjoin(
@@ -129,7 +129,7 @@ pk_md_data = @rsubset pk_md_data :OCC == 1 || :OCC == 7
 pk_md_data = @rsubset pk_md_data :ID != 28
 
 
-## Tell NCA that this measurment is at steady state ....  you can also run wiith just the occ 7 data and this ss flag 
+## Tell NCA that this measurement is at steady state ....  you can also run with just the occ 7 data and this ss flag 
 pk_md_data = @rtransform pk_md_data :ss = :TIME > 24 ? 1 : 0
 
 ## Specify the units used in the analysis
@@ -138,7 +138,7 @@ concu = u"mg/L"
 amtu = u"mg"
 
 
-## Map Dataframe to NCA Population
+## Map DataFrame to NCA Population
 pop_inf_md = read_nca(
     pk_md_data,
     id = :ID,
