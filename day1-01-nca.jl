@@ -1,7 +1,5 @@
 # load libraries
 using CSV
-using Chain
-using DataFrames
 using DataFramesMeta
 using Dates
 using NCA
