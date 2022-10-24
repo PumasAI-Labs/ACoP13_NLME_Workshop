@@ -24,7 +24,7 @@ amtu = u"mg"
 
 ## Map DataFrame to NCA Population
 pop_bolus_sd = read_nca(
-    pk_data,
+    pk_data;
     id = :id,
     time = :time,
     observations = :conc,
@@ -44,17 +44,17 @@ pop_bolus_sd = read_nca(
 obsvstimes = observations_vs_time(pop_bolus_sd[7])
 
 ## Visualize individual concentration-time curve - semi-log scale
-obsvstimes = observations_vs_time(pop_bolus_sd[7], axis = (yscale = log,))
+obsvstimes = observations_vs_time(pop_bolus_sd[7]; axis = (yscale = log,))
 
 ## Visualize the mean concentration-time curve of population 
 summary_observations_vs_time(
-    pop_bolus_sd,
+    pop_bolus_sd;
     axis = (xlabel = "Time (hour)", ylabel = "Drug Concentration (mg/L)"),
 )
 
 ## Run an annotated NCA to be used for a report
 nca_bolus_sd_report = run_nca(
-    pop_bolus_sd,
+    pop_bolus_sd;
     sigdigits = 3,
     studyid = "STUDY-001",
     studytitle = "Drug Trial: IV Bolus", # required
@@ -68,7 +68,7 @@ nca_bolus_sd_report = run_nca(
 
 ## Summarize results of interest in a clean report
 param_summary_bolus_sd = summarize(
-    nca_bolus_sd_report.reportdf,
+    nca_bolus_sd_report.reportdf;
     stratify_by = [:dose],
     parameters = [:half_life, :tmax, :cmax, :auclast, :vz_obs, :cl_obs, :aucinf_obs],
 )
@@ -77,14 +77,14 @@ param_summary_bolus_sd = summarize(
 report(nca_bolus_sd_report, param_summary_bolus_sd)
 
 ## If you want to just generate an individual NCA parameter
-vz = NCA.vz(pop_bolus_sd, sigdigits = 3)  # Volume of Distribution
-cl = NCA.cl(pop_bolus_sd, sigdigits = 3)  # Clearance
-lambdaz = NCA.lambdaz(pop_bolus_sd, threshold = 3, sigdigits = 3)  # Terminal Elimination Rate Constant, threshold=3 specifies the max no. of time point used for calculation
-lambdaz_1 = NCA.lambdaz(pop_bolus_sd, slopetimes = [8, 12, 16], sigdigits = 3) # slopetimes in this case specifies the exact time point you want for the calculation
-thalf = NCA.thalf(pop_bolus_sd, sigdigits = 3) # Half-life calculation
-cmax_d = NCA.cmax(pop_bolus_sd, normalize = true, sigdigits = 3) # Dose Normalized Cmax
-mrt = NCA.mrt(pop_bolus_sd, sigdigits = 3) # Mean residence time
-aumc = NCA.aumc(pop_bolus_sd, method = :linlog, sigdigits = 3) # AUMC calculation, using :linlog method
+vz = NCA.vz(pop_bolus_sd)  # Volume of Distribution
+cl = NCA.cl(pop_bolus_sd)  # Clearance
+lambdaz = NCA.lambdaz(pop_bolus_sd; threshold = 3)  # Terminal Elimination Rate Constant, threshold=3 specifies the max no. of time point used for calculation
+lambdaz_1 = NCA.lambdaz(pop_bolus_sd; slopetimes = [8, 12, 16]) # slopetimes in this case specifies the exact time point you want for the calculation
+thalf = NCA.thalf(pop_bolus_sd) # Half-life calculation
+cmax_d = NCA.cmax(pop_bolus_sd; normalize = true) # Dose Normalized Cmax
+mrt = NCA.mrt(pop_bolus_sd) # Mean residence time
+aumc = NCA.aumc(pop_bolus_sd; method = :linlog) # AUMC calculation, using :linlog method
 individual_params = innerjoin(
     vz,
     cl,
@@ -93,18 +93,18 @@ individual_params = innerjoin(
     thalf,
     cmax_d,
     mrt,
-    aumc,
+    aumc;
     on = [:id, :dose],
     makeunique = true,
 )
 
 ## Calculation of AUC at specific time intervals and merge to the final report DataFrame
-auc0_12 = NCA.auc(pop_bolus_sd, interval = (0, 12), method = :linuplogdown, sigdigits = 3) #various other methods are :linear, :linlog
-auc12_24 = NCA.auc(pop_bolus_sd, interval = (12, 24), method = :linuplogdown, sigdigits = 3)
+auc0_12 = NCA.auc(pop_bolus_sd; interval = (0, 12), method = :linuplogdown) #various other methods are :linear, :linlog
+auc12_24 = NCA.auc(pop_bolus_sd; interval = (12, 24), method = :linuplogdown)
 final = innerjoin(
     nca_bolus_sd_report.reportdf,
     auc0_12,
-    auc12_24,
+    auc12_24;
     on = [:id],
     makeunique = true,
 )
