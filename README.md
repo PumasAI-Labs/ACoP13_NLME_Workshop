@@ -32,11 +32,14 @@ October 29, 2022
 
 October 30, 2022
 
-- 08:30 - 10:00 - Patrick - Model Diagnostics Part 1 - Model qualification
-- 10:00 - 10:15 - Coffee break
-- 10:15 - 11:15 - Andreas - Model Diagnostics Part 2 - Plotting
-- 11:15 - 12:30 - Vijay - Sequential PKPD
-- 12:30 - 13:30 - Lunch break
-- 13:30 - 14:30 - Jose - Data Wrangling
-- 14:30 - 14:45 - Coffee break
-- 14:45 - 15:30 - Niklas & Vijay - Sneak peek into DeepPumas
+- 08:00 - 08:45 - Patrick - Model Diagnostics Part 1 - Model qualification
+- 08:45 - 09:30 - Andreas - Model Diagnostics Part 2 - Plotting
+- 09:30 - 09:45 - Coffee break
+- 09:45 - 11:00 - Andreas - Beyond Gaussian
+- 11:00 - 12:00 - Jose - Time to Event
+- 12:00 - 13:00 - Lunch break
+- 13:00 - 13:30 - Vijay - Sequential PKPD
+- 13:30 - 15:00 - Jose - Data Wrangling
+- 15:00 - 15:15 - Coffee break
+- 15:15 - 16:30 - Niklas & Vijay - Sneak peek into DeepPumas
+- 16:30 - 17:00 - Closing Remarks
