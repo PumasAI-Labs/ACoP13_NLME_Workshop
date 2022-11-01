@@ -37,8 +37,8 @@ model = @model begin
         # here is where we calculate concentration and add residual variability
         # tilde (~) means "distributed as"
         cp = @. 1000 * Central / Vc # ipred = A1/V
-        dv ~ @. Normal(cp, cp * σ)
-        # dv ~ @. Normal(cp, sqrt(cp^2 * σ_prop^2 + σ_add^2))
+        # dv ~ @. Normal(cp, cp * σ)
+        dv ~ @. Normal(cp, sqrt(cp^2 * σ_prop^2 + σ_add^2))
     end
 end
 
