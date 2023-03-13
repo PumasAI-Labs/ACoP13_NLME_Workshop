@@ -4,7 +4,7 @@ using PharmaDatasets
 using DataFramesMeta
 
 # Read Data into DataFrame
-pkdata = dataset("bioequivalence/2S2P/PJ2017_3_1")
+pkdata = dataset("bioequivalence/RT_TR/PJ2017_3_1")
 
 # BE with Cmax
 output_cmax =
