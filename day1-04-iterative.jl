@@ -96,7 +96,7 @@ end
 params_1cmt_comb =
     (tvvc = 5, tvcl = 0.2, Ω = Diagonal([0.09, 0.09]), σ²_add = 0.01, σ²_prop = 0.01)
 
-pkfit_1cmt_comb = fit(pk_1cmt, pop, params_1cmt_comb, Pumas.FOCE())
+pkfit_1cmt_comb = fit(pk_1cmt, pop, params_1cmt_comb, FOCE())
 
 ## Show Model diagnistic criteria (more on day 2)
 metrics_pkfit_1cmt_comb = metrics_table(pkfit_1cmt_comb)
@@ -108,7 +108,7 @@ infer_1cmt_comb = infer(pkfit_1cmt_comb) # computes variance-covariance matrix C
 coeftable(infer_1cmt_comb) # returns a table with parameter, se, ci lower and ci upper
 
 ##  look at the influenntial individuals                     
-pk_influential = findinfluential(pk_1cmt, pop, params_1cmt_comb, Pumas.FOCE())
+pk_influential = findinfluential(pk_1cmt, pop, params_1cmt_comb, FOCE())
 
 ## Save your fitted model 
 serialize("pkfit_1cmt_comb.jls", pkfit_1cmt_comb)
@@ -194,18 +194,18 @@ params_2cmt_comb = (
 
 
 ## Maximum likelihood estimation
-pkfit_2cmt_comb = fit(pk_2cmt, pop, params_2cmt_comb, Pumas.FOCE())
+pkfit_2cmt_comb = fit(pk_2cmt, pop, params_2cmt_comb, FOCE())
 ##  you can quickly check proportional and additive error as well
 pkfit_2cmt_add = fit(
     pk_2cmt,
     pop,
     params_2cmt_comb,
     constantcoef = (σ²_prop = 0,), # sets a parameter to a fixed value
-    Pumas.FOCE(),
+    FOCE(),
 )
 
 pkfit_2cmt_prop =
-    fit(pk_2cmt, pop, params_2cmt_comb, constantcoef = (σ²_add = 0,), Pumas.FOCE())
+    fit(pk_2cmt, pop, params_2cmt_comb, constantcoef = (σ²_add = 0,), FOCE())
 
 # Serialize fits 
 serialize("pk_fit_2cmt_comb.jls", pkfit_2cmt_comb)
@@ -295,7 +295,7 @@ params_base_wt = (
 
 
 ## Maximum likelihood estimation
-pkfit_base_wt = fit(pk_base_wt, pop, params_base_wt, Pumas.FOCE())
+pkfit_base_wt = fit(pk_base_wt, pop, params_base_wt, FOCE())
 
 serialize("pkfit_base_wt.jls", pkfit_base_wt)
 pkfit_base_wt = deserialize("pkfit_base_wt.jls")
@@ -380,7 +380,7 @@ params_base_wt_crcl = (
 
 
 ## Maximum likelihood estimation
-pkfit_base_wt_crcl = fit(pk_base_wt_crcl, pop, params_base_wt_crcl, Pumas.FOCE())
+pkfit_base_wt_crcl = fit(pk_base_wt_crcl, pop, params_base_wt_crcl, FOCE())
 
 
 serialize("pkfit_base_wt_crcl.jls", pkfit_base_wt_crcl)
