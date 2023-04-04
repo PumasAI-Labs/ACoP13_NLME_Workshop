@@ -47,10 +47,10 @@ params = (tvcl = 1.0, tvvc = 10.0, Ω = Diagonal([0.09, 0.09]), σ = 3.16)
 params2 = (tvcl = 1.0, tvvc = 8.0, Ω = Diagonal([0.5, 0.5]), σ = 4.16)
 
 # Fit a base model
-fit_results = fit(model, population, params, Pumas.FOCE())
-fit_results2 = fit(model, population, params, Pumas.FOCE(); constantcoef = (Ω = Diagonal(zeros(2)),)) # Turn off random effects
-fit_results3 = fit(model, population, params2, Pumas.LaplaceI())
-fit_results4 = fit(model, population, params2, Pumas.FOCE(); constantcoef = (tvcl = 1.0,))
+fit_results = fit(model, population, params, FOCE())
+fit_results2 = fit(model, population, params, FOCE(); constantcoef = (Ω = Diagonal(zeros(2)),)) # Turn off random effects
+fit_results3 = fit(model, population, params2, LaplaceI())
+fit_results4 = fit(model, population, params2, FOCE(); constantcoef = (tvcl = 1.0,))
 
 fit_compare = compare_estimates(;
     FOCE = fit_results,

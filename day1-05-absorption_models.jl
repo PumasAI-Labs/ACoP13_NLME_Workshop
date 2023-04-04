@@ -41,7 +41,7 @@ end
 
 param_foabs = (tvcl = 5, tvvc = 20, tvka = 1, Ω = Diagonal([0.04, 0.04, 0.04]), σ = 1.0)
 
-fit_foabs = fit(foabs, pop_oral, param_foabs, Pumas.FOCE())
+fit_foabs = fit(foabs, pop_oral, param_foabs, FOCE())
 
 # Zero-Order Absorption
 zoabs = @model begin
@@ -79,7 +79,7 @@ end
 
 param_zoabs = (tvcl = 5, tvvc = 20, tvdur = 0.3, Ω = Diagonal([0.04, 0.04, 0.04]), σ = 1.0)
 
-fit_zoabs = fit(zoabs, pop_dur, param_zoabs, Pumas.FOCE())
+fit_zoabs = fit(zoabs, pop_dur, param_zoabs, FOCE())
 
 # Two Parallel First-Order Processes
 two_parallel_foabs = @model begin
@@ -131,4 +131,4 @@ param_two_parallel_foabs = (
 )
 
 fit_two_parallel_foabs =
-    fit(two_parallel_foabs, pop_oral, param_two_parallel_foabs, Pumas.FOCE())
+    fit(two_parallel_foabs, pop_oral, param_two_parallel_foabs, FOCE())

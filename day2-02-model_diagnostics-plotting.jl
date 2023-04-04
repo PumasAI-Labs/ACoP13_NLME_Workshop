@@ -62,20 +62,20 @@ params =
     (tvvc = 5, tvcl = 0.02, tvq = 0.01, tvvp = 10, Ω = Diagonal([0.01, 0.01]), σ = 0.01)
 
 # Fit models
-fit_results = fit(model, pop, params, Pumas.FOCE())
-fit_results_naive = fit(model, pop, params, Pumas.FOCE(); constantcoef = (Ω = Diagonal(zeros(2)),)) # Turn off random effects
-fit_results_fixed = fit(model, pop, params, Pumas.FOCE(); constantcoef = (tvcl = 0.3,))
+fit_results = fit(model, pop, params, FOCE())
+fit_results_naive = fit(model, pop, params, FOCE(); constantcoef = (Ω = Diagonal(zeros(2)),)) # Turn off random effects
+fit_results_fixed = fit(model, pop, params, FOCE(); constantcoef = (tvcl = 0.3,))
 
 # Confidence Intervals
 fit_infer = infer(fit_results)
 coeftable(fit_infer)  # DataFrame
 
 # Confidence Intervals using bootstrap
-fit_infer_bs = infer(fit_results, Pumas.Bootstrap(samples = 100))
+fit_infer_bs = infer(fit_results, Bootstrap(samples = 100))
 coeftable(fit_infer_bs)
 
 # Confidence Intervals using SIR
-fit_infer_sir = infer(fit_results, Pumas.SIR(samples = 10, resamples = 10))
+fit_infer_sir = infer(fit_results, SIR(samples = 10, resamples = 10))
 coeftable(fit_infer_sir)
 
 # Inspect the models
@@ -90,7 +90,7 @@ observations_vs_ipredictions(fit_inspect)
 wresiduals_vs_time(fit_inspect)
 iwresiduals_vs_ipredictions(fit_inspect)
 # using custom likelihood approx
-fit_wres = wresiduals(fit_results, Pumas.FO())
+fit_wres = wresiduals(fit_results, FO())
 wresiduals_vs_time(model, fit_wres) # using model + custom wresiduals
 # using custom predict
 fit_predict = predict(fit_results)

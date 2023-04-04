@@ -78,11 +78,11 @@ params =
     (tvvc = 5, tvcl = 0.02, tvq = 0.01, tvvp = 10, allometric = 1.0, Ω = Diagonal([0.01, 0.01]), σ = 0.01)
 
 # Check for finite loglikelihood
-loglikelihood(model, pop, params, Pumas.FOCE()) # using model + population + params + estimation method
-findinfluential(model, pop, params, Pumas.FOCE(); k = 30)
+loglikelihood(model, pop, params, FOCE()) # using model + population + params + estimation method
+findinfluential(model, pop, params, FOCE(); k = 30)
 
 # Fit model
-fit_results_base = fit(model, pop, params, Pumas.FOCE(); constantcoef=(allometric=0.0,))
+fit_results_base = fit(model, pop, params, FOCE(); constantcoef=(allometric=0.0,))
 
 # Model metrics in a DataFrame
 fit_results_base_metrics = metrics_table(fit_results_base)
@@ -144,7 +144,7 @@ empirical_bayes_vs_covariates(fit_inspect_base;
     markersize=5,)
 
 # Fit allometric scaling model
-fit_results_allometric = fit(model, pop, params, Pumas.FOCE(); constantcoef=(allometric=1.0,))
+fit_results_allometric = fit(model, pop, params, FOCE(); constantcoef=(allometric=1.0,))
 compare_estimates(;fit_results_base, fit_results_allometric)
 
 fit_inspect_allometric = inspect(fit_results_allometric)
@@ -160,26 +160,26 @@ coeftable(fit_results_allometric)  # DataFrame
 stderror(fit_infer)
 
 ## Confidence Intervals using bootstrap
-fit_infer_bs = infer(fit_results_allometric, Pumas.Bootstrap(samples = 100))
+fit_infer_bs = infer(fit_results_allometric, Bootstrap(samples = 100))
 coeftable(fit_infer_bs)
 stderror(fit_infer)
 DataFrame(fit_infer_bs.vcov)
 
 ## Stratified sampling of subjects
-fit_infer_bs_stratify = infer(fit_results_allometric, Pumas.Bootstrap(samples = 100, stratify_by=:WT))
+fit_infer_bs_stratify = infer(fit_results_allometric, Bootstrap(samples = 100, stratify_by=:WT))
 coeftable(fit_infer_bs_stratify)
 stderror(fit_infer)
 
 # Seed
 rng = Random.seed!(2131)
-fit_infer_bs_rng_1 = infer(fit_results_allometric, Pumas.Bootstrap(;samples = 20, rng))
+fit_infer_bs_rng_1 = infer(fit_results_allometric, Bootstrap(;samples = 20, rng))
 rng = Random.seed!(2131)
-fit_infer_bs_rng_2 = infer(fit_results_allometric, Pumas.Bootstrap(;samples = 20, rng))
+fit_infer_bs_rng_2 = infer(fit_results_allometric, Bootstrap(;samples = 20, rng))
 coeftable(fit_infer_bs_rng_1)
 coeftable(fit_infer_bs_rng_2)
 
 ## Confidence Intervals using SIR
-fit_infer_sir = infer(fit_results_allometric, Pumas.SIR(samples = 100, resamples = 10))
+fit_infer_sir = infer(fit_results_allometric, SIR(samples = 100, resamples = 10))
 coeftable(fit_infer_sir)
 
 # VPCs
