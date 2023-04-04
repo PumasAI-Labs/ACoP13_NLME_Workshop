@@ -160,26 +160,26 @@ coeftable(fit_results_allometric)  # DataFrame
 stderror(fit_infer)
 
 ## Confidence Intervals using bootstrap
-fit_infer_bs = infer(fit_results_allometric, Bootstrap(samples = 100))
+fit_infer_bs = infer(fit_results_allometric, Pumas.Bootstrap(samples = 100))
 coeftable(fit_infer_bs)
 stderror(fit_infer)
 DataFrame(fit_infer_bs.vcov)
 
 ## Stratified sampling of subjects
-fit_infer_bs_stratify = infer(fit_results_allometric, Bootstrap(samples = 100, stratify_by=:WT))
+fit_infer_bs_stratify = infer(fit_results_allometric, Pumas.Bootstrap(samples = 100, stratify_by=:WT))
 coeftable(fit_infer_bs_stratify)
 stderror(fit_infer)
 
 # Seed
 rng = Random.seed!(2131)
-fit_infer_bs_rng_1 = infer(fit_results_allometric, Bootstrap(;samples = 20, rng))
+fit_infer_bs_rng_1 = infer(fit_results_allometric, Pumas.Bootstrap(;samples = 20, rng))
 rng = Random.seed!(2131)
-fit_infer_bs_rng_2 = infer(fit_results_allometric, Bootstrap(;samples = 20, rng))
+fit_infer_bs_rng_2 = infer(fit_results_allometric, Pumas.Bootstrap(;samples = 20, rng))
 coeftable(fit_infer_bs_rng_1)
 coeftable(fit_infer_bs_rng_2)
 
-## Confidence Intervals using SIR
-fit_infer_sir = infer(fit_results_allometric, SIR(samples = 100, resamples = 10))
+## Confidence Intervals using Pumas.SIR
+fit_infer_sir = infer(fit_results_allometric, Pumas.SIR(samples = 100, resamples = 10))
 coeftable(fit_infer_sir)
 
 # VPCs

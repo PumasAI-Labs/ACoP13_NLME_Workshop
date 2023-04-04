@@ -71,11 +71,11 @@ fit_infer = infer(fit_results)
 coeftable(fit_infer)  # DataFrame
 
 # Confidence Intervals using bootstrap
-fit_infer_bs = infer(fit_results, Bootstrap(samples = 100))
+fit_infer_bs = infer(fit_results, Pumas.Bootstrap(samples = 100))
 coeftable(fit_infer_bs)
 
-# Confidence Intervals using SIR
-fit_infer_sir = infer(fit_results, SIR(samples = 10, resamples = 10))
+# Confidence Intervals using Pumas.SIR
+fit_infer_sir = infer(fit_results, Pumas.SIR(samples = 10, resamples = 10))
 coeftable(fit_infer_sir)
 
 # Loglikelihood and NONMEM's OFV with constant
